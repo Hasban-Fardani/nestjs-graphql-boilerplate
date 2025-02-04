@@ -9,7 +9,7 @@ export class UserEntity {
   email: string;
 
   @Field({ nullable: true })
-  otpSecret: string;
+  otpSecret: string | null;
 
   @Field(() => Date)
   createdAt: Date;

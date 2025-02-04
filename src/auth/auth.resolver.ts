@@ -5,6 +5,8 @@ import { LoginInput } from './inputs/login.input';
 import { LoginResponse } from './types/login-response.type';
 import { GqlAuthGuard } from './guards/qgl-auth.guard';
 import { GqlThrottlerGuard } from '../common/guards/throttler-gql.guard';
+import { RegisterInput } from './inputs/register.input';
+import { RegisterResponse } from './types/register-response.type';
 
 @Resolver('Authentication')
 @UseGuards(GqlThrottlerGuard)
@@ -32,5 +34,24 @@ export class AuthResolver {
       loginInput.password
     );
     return this.authService.login(user);
+  }
+
+  @Mutation(() => RegisterResponse, {
+    description: 'Register with email and password',
+    name: 'register'
+  })
+  async register(
+    @Args('registerInput') registerInput: RegisterInput
+  ): Promise<RegisterResponse> {
+    const user = await this.authService.register(
+      registerInput.email,
+      registerInput.password,
+    )
+
+    return {
+      success: true,
+      message: 'Register successful',
+      user: user
+    }
   }
 }

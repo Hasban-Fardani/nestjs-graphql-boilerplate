@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { LoginResponse } from './types/login-response.type';
 import * as bcrypt from 'bcrypt';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -53,5 +54,16 @@ export class AuthService {
       message: 'Token refreshed',
       access_token: this.jwtService.sign(payload)
     };
-  }  
+  }
+
+  async register(email: string, password: string): Promise<UserEntity> {
+    const userData = await this.prisma.user.create({
+      data: {
+        email: email,
+        password: await bcrypt.hash(password, 10),
+      }
+    })
+
+    return userData
+  }
 }

@@ -28,13 +28,4 @@ export class UsersService {
       throw new NotFoundException('User Not Found')
     }
   }
-
-  async create(user: RegisterInput): Promise<void | UserEntity> {
-    this.prisma.user.create({
-      data: {
-        email: user.email,
-        password: user.password,
-      }
-    })
-  }
 }
