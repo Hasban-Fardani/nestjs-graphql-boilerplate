@@ -1,0 +1,46 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input LoginInput {
+  """User email address"""
+  email: String!
+
+  """User password"""
+  password: String!
+}
+
+"""Response after login attempt"""
+type LoginResponse {
+  """JWT token for authentication"""
+  access_token: String
+  message: String
+  success: Boolean!
+}
+
+type Mutation {
+  """Login with email and password"""
+  login(loginInput: LoginInput!): LoginResponse!
+}
+
+type Query {
+  """
+  Get current user data. Requires Authorization header with Bearer token.
+  """
+  currentUser: User!
+
+  """Example API. Requires Authorization header with Bearer token."""
+  guardedExampleAPI: String!
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  otpSecret: String
+}

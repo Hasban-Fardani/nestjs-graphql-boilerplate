@@ -32,6 +32,7 @@
     "@nestjs/swagger": "^11.0.3",
     "@nestjs/throttler": "^6.4.0",
     "@prisma/client": "^6.3.0",
+    "@types/bcrypt": "^5.0.2",
     "apollo-server-express": "^3.13.0",
     "bcrypt": "^5.1.1",
     "cache-manager": "^6.4.0",
@@ -41,6 +42,7 @@
     "graphql": "^16.10.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "prisma": "^6.3.0",
     "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
@@ -89,5 +91,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+  "trustedDependencies": [
+    "@nestjs/core",
+    "@swc/core"
+  ]
 }
