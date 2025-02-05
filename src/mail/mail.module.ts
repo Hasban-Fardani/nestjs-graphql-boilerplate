@@ -1,35 +1,41 @@
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { Module } from '@nestjs/common';
-import { join } from 'path';
 import { MailService } from './mail.service';
+import { join } from 'path';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MailerModule.forRoot({
-      // transport: 'smtps://user@example.com:topsecret@smtp.example.com',
-      // or
-      transport: {
-        host: process.env.EMAIL_HOST,
-        secure: JSON.parse(process.env.EMAIL_SECURE!),
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASSWORD,
+    MailerModule.forRootAsync({
+      // imports: [ConfigModule], // import module if not enabled globally
+      useFactory: async (config: ConfigService) => ({
+        // transport: config.get("MAIL_TRANSPORT"),
+        // or
+        transport: {
+          host: config.get('MAIL_HOST'),
+          port: config.get('MAIL_PORT'),
+          secure: config.get('MAIL_SECURE'),
+          auth: {
+            user: config.get('MAIL_USER'),
+            pass: config.get('MAIL_PASSWORD'),
+          },
         },
-      },
-      defaults: {
-        from: `"No Reply" <${process.env.EMAIL_USER}>`,
-      },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
-        options: {
-          strict: true,
+        defaults: {
+          from: `"No Reply" <${config.get('MAIL_USER')}>`,
         },
-      },
+        template: {
+          dir: join(__dirname, 'templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   providers: [MailService],
-  exports: [MailService], // 👈 export for DI
+  exports: [MailService],
 })
 export class MailModule {}
